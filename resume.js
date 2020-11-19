@@ -116,8 +116,8 @@ function init() {
     var meshCanvas1 = new THREE.Mesh(geometry, materialCanvas1);
     meshCanvas1.rotation.x = - Math.PI / 2;
     meshCanvas1.scale.set(1000, 1000, 1000);
-    mint.addPainting("images/海绵宝宝.jpg", meshCanvas1, scene, geometry);
-    mint.addPainting("images/海绵宝宝.jpg", meshCanvas1, scene, geometry, [null, null, -500]);
+    mint.addPainting("./images/海绵宝宝.jpg", meshCanvas1, scene, geometry);
+    mint.addPainting("./images/海绵宝宝.jpg", meshCanvas1, scene, geometry, [null, null, -500]);
 
     // RENDERER
 
