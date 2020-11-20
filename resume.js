@@ -29,16 +29,56 @@ var controls = {
 var projectiveObj;//定义上次投射到的对象
 var raycaster, mouse;//光投射器，鼠标位置对应的二维向量
 
+var browerType;
+
 // 自定义插件
 var mint = new Mint("Plug init ...");
 mint.init(THREE);
 var clock = new THREE.Clock();
 
+browerTypeChange();
 init();
 animate();
 
-function init() {
+function createTip(title) {
+    const tip = document.createElement('div');
+    tip.style.zIndex = "999";
+    tip.style.background = "#ccc";
+    tip.style.width = "300px";
+    tip.style.height = "100px";
+    tip.style.color = "red";
+    tip.style.fontSize = "25px";
+    tip.style.fontWeight = "600";
+    tip.style.position = "absolute";
+    tip.style.textAlign = "left";
+    tip.style.top = "30%";
+    tip.style.left = "50%";
+    tip.style.transform = "translate(-50%,-50%)";
+    tip.innerText = title;
+    document.body.append(tip);
+    tip.onclick = function () {
+        tip.remove();
+    };
+}
 
+function browerTypeChange() {
+    window.addEventListener("load", function () {
+        browerTypeChange();
+    })
+    var ua = window.navigator.userAgent.toLowerCase();    // 该属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息
+    //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        createTip("暂不支持微信端");
+        browerType = "weixin";
+    } else if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
+        createTip("当前模式为移动端，将在之后支持,点击可关闭提示！");
+        browerType = "mobile";
+    } else {
+        browerType = "pc";
+    }
+}
+
+function init() {
     container = document.createElement('div');
     document.body.appendChild(container);
 
