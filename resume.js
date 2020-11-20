@@ -5,7 +5,7 @@ import Stats from './libs/stats.module.js';
 import { OrbitControls } from './libs/OrbitControls.js';
 import { MD2CharacterComplex } from './libs/MD2CharacterComplex.js';
 import { Gyroscope } from './libs/Gyroscope.js';
-import { Mint } from './mint.min.js';
+import { Mint } from './mint.js';
 import { SVGLoader } from './libs/SVGLoader.js';
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
@@ -116,8 +116,8 @@ function init() {
     var meshCanvas1 = new THREE.Mesh(geometry, materialCanvas1);
     meshCanvas1.rotation.x = - Math.PI / 2;
     meshCanvas1.scale.set(1000, 1000, 1000);
-    mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry);
-    mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry, [null, null, -500]);
+    mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry, [-700, null, null]);
+    // mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry, [null, null, -500]);
 
     // RENDERER
 
