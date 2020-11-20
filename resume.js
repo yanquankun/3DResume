@@ -26,6 +26,8 @@ var controls = {
     moveRight: false
 
 };
+var projectiveObj;//定义上次投射到的对象
+var raycaster, mouse;//光投射器，鼠标位置对应的二维向量
 
 // 自定义插件
 var mint = new Mint("Plug init ...");
@@ -118,6 +120,46 @@ function init() {
     meshCanvas1.scale.set(1000, 1000, 1000);
     mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry, [-700, null, null]);
     // mint.addPainting("./images/haimianbaobao.jpg", meshCanvas1, scene, geometry, [null, null, -500]);
+
+    // 创建辅助坐标轴
+    var axes = new THREE.AxisHelper(200);//参数设置了三条轴线的长度
+    axes.position.x = -500;
+    axes.position.y = 0;
+    axes.position.z = 100;
+    scene.add(axes)
+
+    // 添加光投射器Raycaster
+    // 通过光投射器结合鼠标位置坐标，判断鼠标是否经过物体
+    raycaster = new THREE.Raycaster();//光线投射器
+    mouse = new THREE.Vector2();//二维向量 
+    document.addEventListener('mousemove', function ($event) {
+        $event.preventDefault();
+        mouse.x = ($event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -($event.clientY / window.innerHeight) * 2 + 1;
+    }, false);
+
+    //添加鼠标点击事件，捕获点击时当前选中的物体
+    window.addEventListener('click', function () {
+        if (projectiveObj) {
+            console.log(projectiveObj.geometry.parameters.text);
+            const text = projectiveObj.geometry.parameters.text;
+            if (text) {
+                if (text.indexOf("git") != -1) window.open(text.split("git:")[1]);
+                else alert("您正在读的文本是：" + text);
+            }
+            if (projectiveObj.geometry.parameters.text)
+                if (projectiveObj.hasChecked) {
+                    !Array.isArray(projectiveObj.material) &&
+                        (projectiveObj.hasChecked = false)
+                    projectiveObj.material.color.set("gray");
+                } else {
+                    !Array.isArray(projectiveObj.material) &&
+                        (projectiveObj.hasChecked = true)
+                        && projectiveObj.material.color.set("#dd830d");
+                }
+        }
+
+    }, false);
 
     // RENDERER
 
@@ -294,7 +336,29 @@ function onKeyUp(event) {
 
 }
 
-//
+/**
+   * 根据光投射器判断鼠标所在向量方向是否穿过物体
+   * @param {*} raycaster 光投射器
+   * @param {*} scene     场景
+   * @param {*} camera    相机
+   * @param {*} mouse     鼠标位置对应的二维向量
+   */
+function renderRaycasterObj(raycaster, scene, camera, mouse) {
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0) {
+        var currentProjectiveObjT = intersects[0].object;
+        if (projectiveObj != currentProjectiveObjT) {
+            if ((currentProjectiveObjT instanceof THREE.AxisHelper) || (currentProjectiveObjT instanceof THREE.GridHelper)) {
+                //穿过的是坐标轴线和网格线
+                return;
+            }
+            projectiveObj = intersects[0].object;
+        }
+    } else {
+        projectiveObj = null;
+    }
+}
 
 function animate() {
 
@@ -314,7 +378,7 @@ function render() {
         characters[i].update(delta);
 
     }
-
+    renderRaycasterObj(raycaster, scene, camera, mouse);//渲染光投射器投射到的对象
     renderer.render(scene, camera);
 
 }
