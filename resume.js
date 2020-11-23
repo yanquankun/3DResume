@@ -5,7 +5,7 @@ import Stats from './libs/stats.module.js';
 import { OrbitControls } from './libs/OrbitControls.js';
 import { MD2CharacterComplex } from './libs/MD2CharacterComplex.js';
 import { Gyroscope } from './libs/Gyroscope.js';
-import { Mint } from './mint.min.js';
+import { Mint } from './mint.js';
 import { SVGLoader } from './libs/SVGLoader.js';
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
@@ -19,12 +19,12 @@ var nCharacters = 0;
 var cameraControls;
 
 var controls = {
-
     moveForward: false,
     moveBackward: false,
     moveLeft: false,
-    moveRight: false
-
+    moveRight: false,
+    jump: false,
+    attack: false
 };
 var projectiveObj;//定义上次投射到的对象
 var raycaster, mouse;//光投射器，鼠标位置对应的二维向量
@@ -60,6 +60,53 @@ function createTip(title) {
         tip.remove();
     };
 }
+var lastControl = "";
+// style: [top,right,bottom,left,width]格式
+function createControlDom(domName, controlName, style) {
+    lastControl = controlName;
+    domName = document.createElement("img");
+    domName.style.zIndex = "999";
+    domName.src = "./images/haimianbaobao.jpg";
+    domName.style.width = style[4] || "200px";
+    domName.style.position = "absolute";
+    domName.style.top = style[0];
+    domName.style.right = style[1];
+    domName.style.bottom = style[2];
+    domName.style.left = style[3];
+    document.body.append(domName);
+    return domName;
+}
+
+function changeControl(controlName) {
+    for (let k in controls) {
+        controlName != k && (controls[k] = false);
+    }
+    controls[controlName] = !controls[controlName];
+}
+
+// 移动端方向创建
+function createControls() {
+    var space = createControlDom("space", 'jump', [null, "60px", "150px", null, "200px"]);
+    space.onclick = function () {
+        changeControl("jump");
+    }
+    var top = createControlDom("top", 'moveForward', [null, null, "280px", "250px", "200px"]);
+    top.onclick = function () {
+        changeControl("moveForward");
+    }
+    var bottom = createControlDom("bottom", 'moveBackward', [null, null, "30px", "250px", "200px"]);
+    bottom.onclick = function () {
+        changeControl("moveBackward");
+    }
+    var left = createControlDom("left", 'moveLeft', [null, null, "150px", "30px", "200px"]);
+    left.onclick = function () {
+        changeControl("moveLeft");
+    }
+    var right = createControlDom("right", 'moveRight', [null, null, "150px", "480px", "200px"]);
+    right.onclick = function () {
+        changeControl("moveRight");
+    }
+}
 
 function browerTypeChange() {
     window.addEventListener("load", function () {
@@ -71,7 +118,8 @@ function browerTypeChange() {
         createTip("暂不支持微信端");
         browerType = "weixin";
     } else if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-        createTip("当前模式为移动端，将在之后支持,点击可关闭提示！");
+        // createTip("当前模式为移动端，将在之后支持,点击可关闭提示！");
+        createControls();
         browerType = "mobile";
     } else {
         browerType = "pc";
@@ -330,7 +378,7 @@ function onWindowResize() {
 
 function onKeyDown(event) {
 
-    switch (event.keyCode) {
+    switch (event.keyCode || event) {
 
         case 38: /*up*/
         case 87: /*W*/ 	controls.moveForward = true; break;
@@ -354,7 +402,7 @@ function onKeyDown(event) {
 
 function onKeyUp(event) {
 
-    switch (event.keyCode) {
+    switch (event.keyCode || event) {
 
         case 38: /*up*/
         case 87: /*W*/ controls.moveForward = false; break;
