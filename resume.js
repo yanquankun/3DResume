@@ -40,33 +40,16 @@ browerTypeChange();
 init();
 animate();
 
-function createTip(title) {
-    const tip = document.createElement('div');
-    tip.style.zIndex = "999";
-    tip.style.background = "#ccc";
-    tip.style.width = "300px";
-    tip.style.height = "100px";
-    tip.style.color = "red";
-    tip.style.fontSize = "25px";
-    tip.style.fontWeight = "600";
-    tip.style.position = "absolute";
-    tip.style.textAlign = "left";
-    tip.style.top = "30%";
-    tip.style.left = "50%";
-    tip.style.transform = "translate(-50%,-50%)";
-    tip.innerText = title;
-    document.body.append(tip);
-    tip.onclick = function () {
-        tip.remove();
-    };
+function createTip(title, styleStr) {
+    mint.createTip(title, styleStr);
 }
 var lastControl = "";
 // style: [top,right,bottom,left,width]格式
-function createControlDom(domName, controlName, style) {
+function createControlDom(domName, controlName, style, imgUrl) {
     lastControl = controlName;
     domName = document.createElement("img");
     domName.style.zIndex = "999";
-    domName.src = "./images/haimianbaobao.jpg";
+    domName.src = imgUrl;
     domName.style.width = style[4] || "200px";
     domName.style.position = "absolute";
     domName.style.top = style[0];
@@ -86,23 +69,23 @@ function changeControl(controlName) {
 
 // 移动端方向创建
 function createControls() {
-    var space = createControlDom("space", 'jump', [null, "60px", "150px", null, "200px"]);
+    var space = createControlDom("space", 'jump', [null, "160px", "150px", null, "150px"], "./images/space.png");
     space.onclick = function () {
         changeControl("jump");
     }
-    var top = createControlDom("top", 'moveForward', [null, null, "280px", "250px", "200px"]);
+    var top = createControlDom("top", 'moveForward', [null, null, "280px", "250px", "100px"], "./images/up.png");
     top.onclick = function () {
         changeControl("moveForward");
     }
-    var bottom = createControlDom("bottom", 'moveBackward', [null, null, "30px", "250px", "200px"]);
+    var bottom = createControlDom("bottom", 'moveBackward', [null, null, "30px", "250px", "100px"], "./images/down.png");
     bottom.onclick = function () {
         changeControl("moveBackward");
     }
-    var left = createControlDom("left", 'moveLeft', [null, null, "150px", "30px", "200px"]);
+    var left = createControlDom("left", 'moveLeft', [null, null, "150px", "130px", "100px"], "./images/left.png");
     left.onclick = function () {
         changeControl("moveLeft");
     }
-    var right = createControlDom("right", 'moveRight', [null, null, "150px", "480px", "200px"]);
+    var right = createControlDom("right", 'moveRight', [null, null, "150px", "380px", "100px"], "./images/right.png");
     right.onclick = function () {
         changeControl("moveRight");
     }
@@ -112,13 +95,14 @@ function browerTypeChange() {
     window.addEventListener("load", function () {
         browerTypeChange();
     })
+    var styleStr = ";background:#ccc;width:400px;height:100px;color:red;font-size:30px;font-weight:600;position:absolute;text-align:center;padding:50px;line-height:40px;top:30%;left:50%;transform:translate(-50%,-50%)";
     var ua = window.navigator.userAgent.toLowerCase();    // 该属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息
     //通过正则表达式匹配ua中是否含有MicroMessenger字符串
     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-        createTip("暂不支持微信端");
+        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr)
         browerType = "weixin";
     } else if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-        // createTip("当前模式为移动端，将在之后支持,点击可关闭提示！");
+        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr);
         createControls();
         browerType = "mobile";
     } else {
