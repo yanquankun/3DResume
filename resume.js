@@ -5,7 +5,7 @@ import Stats from './libs/stats.module.js';
 import { OrbitControls } from './libs/OrbitControls.js';
 import { MD2CharacterComplex } from './libs/MD2CharacterComplex.js';
 import { Gyroscope } from './libs/Gyroscope.js';
-import { Mint } from './mint.js';
+import { Mint } from './mint.min.js';
 import { SVGLoader } from './libs/SVGLoader.js';
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
