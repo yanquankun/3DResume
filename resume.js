@@ -100,6 +100,7 @@ function browerTypeChange() {
     //通过正则表达式匹配ua中是否含有MicroMessenger字符串
     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
         createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr)
+        createControls();
         browerType = "weixin";
     } else if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
         createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr);
