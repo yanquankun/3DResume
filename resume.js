@@ -99,11 +99,11 @@ function browerTypeChange() {
     var ua = window.navigator.userAgent.toLowerCase();    // 该属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息
     //通过正则表达式匹配ua中是否含有MicroMessenger字符串
     if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr)
+        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失，移动端点击效果暂未提供", styleStr)
         createControls();
         browerType = "weixin";
     } else if ((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i))) {
-        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失", styleStr);
+        createTip("个人服务器，性能较差，请耐心等待,点击提示框或2s后，提示将自动消失，移动端点击效果暂未提供", styleStr);
         createControls();
         browerType = "mobile";
     } else {
@@ -154,12 +154,37 @@ function init() {
     // scene.add( new CameraHelper( light.shadow.camera ) );
 
     // 自定义文字
-    mint.createText(scene, "hellow!闫全堃(Mint) 个人介绍", {
+    mint.createText(scene, "hellow 闫全堃(Mint) 个人介绍:", {
         size: 20, height: 2, weight: 'normal', curveSegments: 10,
         style: "normal",
         bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
         material: 0, extrudeMaterial: 1
     }, [50, 200, 400]);
+    mint.createText(scene, "  毕业于2017年山西农业大学(信息与计算科学)", {
+        size: 20, height: 2, weight: 'normal', curveSegments: 10,
+        style: "normal",
+        bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+        material: 0, extrudeMaterial: 1
+    }, [50, 160, 400]);
+    mint.createText(scene, "  邮箱：17600610907@163.com", {
+        size: 20, height: 2, weight: 'normal', curveSegments: 10,
+        style: "normal",
+        bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+        material: 0, extrudeMaterial: 1
+    }, [50, 120, 400]);
+    var year = new Date().getFullYear() - 1993 + 1;
+    mint.createText(scene, "  年龄：" + year + "岁，前端开发+后端", {
+        size: 20, height: 2, weight: 'normal', curveSegments: 10,
+        style: "normal",
+        bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+        material: 0, extrudeMaterial: 1
+    }, [50, 80, 400]);
+    mint.createText(scene, "  个人介绍网址(点击跳转):http://39.97.119.181/myself/index.html", {
+        size: 20, height: 2, weight: 'normal', curveSegments: 10,
+        style: "normal",
+        bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+        material: 0, extrudeMaterial: 1
+    }, [50, 40, 400]);
     mint.createText(scene, "git:https://github.com/yanquankun", {
         size: 20, height: 2, weight: 'normal', curveSegments: 10,
         style: "normal",
@@ -212,12 +237,20 @@ function init() {
     }, false);
 
     //添加鼠标点击事件，捕获点击时当前选中的物体
+    window.addEventListener('touchend', function () {
+        if (projectiveObj) {
+            // console.log(projectiveObj)
+            const text = projectiveObj.geometry.parameters.text;
+            if(text) console.log(text)
+        }
+    })
     window.addEventListener('click', function () {
         if (projectiveObj) {
             console.log(projectiveObj.geometry.parameters.text);
             const text = projectiveObj.geometry.parameters.text;
             if (text) {
                 if (text.indexOf("git") != -1) window.open(text.split("git:")[1]);
+                else if (text.indexOf("个人介绍网址") != -1) window.open(text.split(":")[2]);
                 else alert("您正在读的文本是：" + text);
             }
             if (projectiveObj.geometry.parameters.text)
