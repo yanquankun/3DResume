@@ -9,4 +9,4 @@
 服务器较差，初次加载会很慢，请耐心等待  
 # [在线预览地址](http://39.97.119.181/3DResume/resume.html)
 # [Watch the video](http://39.97.119.181/3DResume/3D.mp4)
-[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](http://youtu.be/vt5fpE0bzSY)
+[![Watch the video](http://39.97.119.181/3DResume/3D.mp4)](http://39.97.119.181/3DResume/3D.mp4)
